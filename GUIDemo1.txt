@@ -1,65 +1,101 @@
 package GUIDemo1;
+
+//import com.oracle.xmlns.internal.webservices.jaxws_databinding.JavaParam;
+//import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-
 //http://yhhuang1966.blogspot.tw/2014/02/java-swing-jbutton-jlabel-jtextfield.html
 
-
 public class GUIDemo1 {
+    
+    static JTextField textField;
     public static void main(String[] args) {
-        
-        System.out.println(args);
-        
-        //¨…≠±
-        JFrame frame = new JFrame();
-        frame.setSize(375, 667);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-       // JCheckBox checkbox = new JCheckBox("JCheckBox");
-       // JRadioButton radiobutton = new JRadioButton("JRadiobutton");
-        //JButton button = new JButton("JButton");
-        //JButton button2 = new JButton("JButton2");
-        //JButton button3 = new JButton("JButton3");
-        
-        
+             //ÁïåÈù¢
+            JFrame demo = new JFrame();
+            demo.setSize(500, 500);
+            demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            demo.getContentPane().setLayout(new FlowLayout());
+            Container cp=demo.getContentPane();
+            cp.setLayout(null);   //ÂèñÊ∂àË≤ºÈÇäÁ∑£
 
-       // JLabel label = new JLabel("swing");
-       //JTextArea textarea = new JTextArea("JTextArea");
+            //Âª∫Á´ãÂãï‰Ωú
+             Action  creatAction = new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SQLiteJDBCHelper aSQLite = new SQLiteJDBCHelper();
+                    aSQLite.createSQL(textField.getText());
+                }
+            };
 
-        //demo.getContentPane().add(BorderLayout.EAST, button2);
+
+        JButton creatButton = new JButton(creatAction);
+        creatButton.setBounds(5, 5, 180,50);
+        demo.add(creatButton);
+        creatButton.setText("CreateTable");
         
-        //demo.getContentPane().add(BorderLayout.WEST, button3);
+        JButton btn2 = new JButton("Insert");
+        btn2.setBounds(380, 5, 100,50);
+        demo.add(btn2);
         
-        //demo.getContentPane().add(BorderLayout.SOUTH, button);
+        textField = new JTextField("123");
+        textField.setBounds(5, 60, 100,50);
+        demo.add(textField);
         
-        //demo.getContentPane().add(BorderLayout.SOUTH, button2);
-        
-        //demo.getContentPane().add(BorderLayout.SOUTH, button3);
-        
-        //demo.getContentPane().add(BorderLayout.SOUTH, button4);
-        
-        //demo.getContentPane().add(BorderLayout.CENTER, textarea);
-        
-        //´ÿ•ﬂ∞ ∞µ
-        Action sendAction = new AbstractAction() {
+        JButton btn4 = new JButton("Query");
+        btn4.setBounds(380, 60, 100,50);
+        demo.add(btn4);
+        JButton btn5 = new JButton("Index");
+        btn5.setBounds(5, 120, 100,50);
+        demo.add(btn5);
+        JButton btn6 = new JButton("Update");
+        btn6.setBounds(380, 120, 100,50);
+        demo.add(btn6);
+        JButton btn7 = new JButton("Delete");
+        btn7.setBounds(380, 180, 100,50);
+        demo.add(btn7);
+
+
+
+        demo.setVisible(true);
+
+
+/*
+
+          //Âª∫Á´ãÂãï‰Ωú
+
+        Action insertAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SQLiteJDBC aSQLite = new SQLiteJDBC();
-                aSQLite.createSQL();
+                SQLiteJDBC2 bSQLite = new SQLiteJDBC2();
+                bSQLite.insertSQL();
             }
         };
-        
-        //´ÿ•ﬂ´ˆ∂s
+
+        Action selectAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBC3 cSQLite = new SQLiteJDBC3();
+                cSQLite.selectSQL();
+            }
+        };
+                                            //SQLiteJDBCHelper helper =new SQLiteJDBCHelper();
+                                            //helper.createSQL("USER");
+
+        //Âª∫Á´ãÊåâÈàï
         JButton sendButton = new JButton(sendAction);
-        sendButton.setText("∂«∞e´ˆ∂s");
-        
-        //∂K§W´ˆ∂s
+        sendButton.setText("Create SQL");
+        JButton insertButton = new JButton(insertAction);
+        insertButton.setText("insertSQL");
+        JButton selectButton = new JButton(selectAction);
+        selectButton.setText("selectSQL");
+        //Ë≤º‰∏äÊåâÈàï
+        frame.getContentPane().add(BorderLayout.EAST , selectButton);
         frame.getContentPane().add(BorderLayout.NORTH , sendButton);
-        frame.getContentPane().add(BorderLayout.EAST , sendButton);
- 
-        frame.setVisible(true);
+        frame.getContentPane().add(BorderLayout.SOUTH, insertButton);
+
+*/
     }
 }
