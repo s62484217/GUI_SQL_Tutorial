@@ -2,100 +2,121 @@ package GUIDemo1;
 
 //import com.oracle.xmlns.internal.webservices.jaxws_databinding.JavaParam;
 //import static javax.swing.JFrame.EXIT_ON_CLOSE;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import javax.swing.*;
-
-//http://yhhuang1966.blogspot.tw/2014/02/java-swing-jbutton-jlabel-jtextfield.html
 
 public class GUIDemo1 {
     
-    static JTextField textField;
     public static void main(String[] args) {
+        
+         final JTextField txtTableName = new JTextField();
 
-             //界面
-            JFrame demo = new JFrame();
-            demo.setSize(500, 500);
-            demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            demo.getContentPane().setLayout(new FlowLayout());
-            Container cp=demo.getContentPane();
-            cp.setLayout(null);   //取消貼邊緣
+         JLabel label = new JLabel("Label");
+         
+        //界面
+        JFrame demo = new JFrame();
+        demo.setSize(1000, 1000);
+        demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        demo.getContentPane().setLayout(new FlowLayout());
+        Container cp = demo.getContentPane();
+        cp.setLayout(null);   //取消貼邊緣
 
-            //建立動作
-             Action  creatAction = new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    SQLiteJDBCHelper aSQLite = new SQLiteJDBCHelper();
-                    aSQLite.createSQL(textField.getText());
-                }
-            };
+        //建立動作
+        Action creatAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBCHelper aSQLite = new SQLiteJDBCHelper();
+                aSQLite.createSQL(txtTableName.getText());
+
+            }
+        };
+
+        Action insertAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBCHelper bSQLite = new SQLiteJDBCHelper();
+                bSQLite.insertSQL(txtTableName.getText());
+                label.setText("insertAction");
+            }
+        };
+
+        Action queryAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBCHelper cSQLite = new SQLiteJDBCHelper();
+                ArrayList<String> answer = (ArrayList<String>) cSQLite.selectSQL(txtTableName.getText());
+
+                label.setText(htmlString(answer));
+            }
+        };
+
+        Action updateAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBCHelper dSQLite = new SQLiteJDBCHelper();
+                ArrayList<String> answer = (ArrayList<String>) dSQLite.updateSQL(txtTableName.getText());
+
+                label.setText(htmlString(answer));
+            }
+        };
+
+        Action delectAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                SQLiteJDBCHelper eSQLite = new SQLiteJDBCHelper();
+                ArrayList<String> answer = (ArrayList<String>) eSQLite.deleteSQL(txtTableName.getText());
+             
+                label.setText(htmlString(answer));
+            }
+        };
 
 
         JButton creatButton = new JButton(creatAction);
-        creatButton.setBounds(5, 5, 180,50);
+        creatButton.setBounds(5, 5, 180, 50);
         demo.add(creatButton);
         creatButton.setText("CreateTable");
-        
-        JButton btn2 = new JButton("Insert");
-        btn2.setBounds(380, 5, 100,50);
-        demo.add(btn2);
-        
-        textField = new JTextField("123");
-        textField.setBounds(5, 60, 100,50);
-        demo.add(textField);
-        
-        JButton btn4 = new JButton("Query");
-        btn4.setBounds(380, 60, 100,50);
-        demo.add(btn4);
-        JButton btn5 = new JButton("Index");
-        btn5.setBounds(5, 120, 100,50);
-        demo.add(btn5);
-        JButton btn6 = new JButton("Update");
-        btn6.setBounds(380, 120, 100,50);
-        demo.add(btn6);
-        JButton btn7 = new JButton("Delete");
-        btn7.setBounds(380, 180, 100,50);
-        demo.add(btn7);
+
+        JButton insertButton = new JButton(insertAction);
+        insertButton.setBounds(380, 5, 100, 50);
+        demo.add(insertButton);
+        insertButton.setText("Insert");
+
+        txtTableName.setText("tablename");
+        txtTableName.setBounds(5, 60, 100, 50);
+        demo.add(txtTableName);
+
+        JButton selectButton = new JButton(queryAction);
+        selectButton.setBounds(380, 60, 100, 50);
+        demo.add(selectButton);
+        selectButton.setText("Query");
+
+        JButton updateButton = new JButton(updateAction);
+        updateButton.setBounds(380, 120, 100, 50);
+        demo.add(updateButton);
+        updateButton.setText("Update");
+
+        JButton deleteButton = new JButton(delectAction);
+        deleteButton.setBounds(380, 180, 100, 50);
+        demo.add(deleteButton);
+        deleteButton.setText("Delete");
+
+        label.setBounds(5, 120, 800, 800);
+        demo.add(label);
 
 
 
         demo.setVisible(true);
-
-
-/*
-
-          //建立動作
-
-        Action insertAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SQLiteJDBC2 bSQLite = new SQLiteJDBC2();
-                bSQLite.insertSQL();
-            }
-        };
-
-        Action selectAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SQLiteJDBC3 cSQLite = new SQLiteJDBC3();
-                cSQLite.selectSQL();
-            }
-        };
-                                            //SQLiteJDBCHelper helper =new SQLiteJDBCHelper();
-                                            //helper.createSQL("USER");
-
-        //建立按鈕
-        JButton sendButton = new JButton(sendAction);
-        sendButton.setText("Create SQL");
-        JButton insertButton = new JButton(insertAction);
-        insertButton.setText("insertSQL");
-        JButton selectButton = new JButton(selectAction);
-        selectButton.setText("selectSQL");
-        //貼上按鈕
-        frame.getContentPane().add(BorderLayout.EAST , selectButton);
-        frame.getContentPane().add(BorderLayout.NORTH , sendButton);
-        frame.getContentPane().add(BorderLayout.SOUTH, insertButton);
-
-*/
     }
+
+    
+    public static String htmlString(ArrayList<String> array) {
+   
+        String sum = "";
+   
+                for (int i = 0; i < array.size(); i++) {
+                    sum += array.get(i);
+                    sum += "<br>";
+            };
+                
+        return "<html>"+ sum + "</html>";
+    }
+
 }
