@@ -1,13 +1,15 @@
 package GUIDemo1;
-
 import java.sql.*;
+import java.util.*;
 
 public class SQLiteJDBCHelper {
+    //String tableName;
+
     public SQLiteJDBCHelper() {
 
     }
 
-    public void createSQL(String tableName) {
+    public void createSQL(String tableName) {      //(String tableName)
 
 
         Connection c = null;
@@ -24,6 +26,7 @@ public class SQLiteJDBCHelper {
                     " AGE            INT     NOT NULL, " +
                     " ADDRESS        CHAR(50), " +
                     " SALARY         REAL)";
+            //"CREATE INDEX " index_name ON + tableName(field_to_be_indexed);
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
@@ -37,7 +40,7 @@ public class SQLiteJDBCHelper {
 
     // --------------------------------------------INSERT--------------------------------------------
 
-    void insertSQL() {
+    void insertSQL(String tableName) {
         Connection c = null;
         Statement stmt = null;
         try {
@@ -47,21 +50,25 @@ public class SQLiteJDBCHelper {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
+            String sql = "INSERT INTO " + tableName + " (ID,NAME,AGE,ADDRESS,SALARY)" +
                     "VALUES (1, 'Paul', 32, 'California', 20000.00 );";
             stmt.executeUpdate(sql);
+            //System.out.println("insert data 1");
 
-            sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
+            sql = "INSERT INTO " + tableName + " (ID,NAME,AGE,ADDRESS,SALARY) " +
                     "VALUES (2, 'Allen', 25, 'Texas', 15000.00 );";
             stmt.executeUpdate(sql);
+            //System.out.println("insert data 2");
 
-            sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
+            sql = "INSERT INTO " + tableName + " (ID,NAME,AGE,ADDRESS,SALARY) " +
                     "VALUES (3, 'Teddy', 23, 'Norway', 20000.00 );";
             stmt.executeUpdate(sql);
+            //System.out.println("insert data 3");
 
-            sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
+            sql = "INSERT INTO  " + tableName + " (ID,NAME,AGE,ADDRESS,SALARY) " +
                     "VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 );";
             stmt.executeUpdate(sql);
+            //System.out.println("insert data 4");
 
             stmt.close();
             c.commit();
@@ -74,8 +81,11 @@ public class SQLiteJDBCHelper {
     }
 
 
-    // --------------------------------------------SELECT--------------------------------------------
-    void selectSQL() {
+    // --------------------------------------------Query--------------------------------------------
+    List<String> selectSQL(String tableName) {
+        
+        List<String> answer = new ArrayList<String>();
+        
         Connection c = null;
         Statement stmt = null;
         try {
@@ -85,20 +95,19 @@ public class SQLiteJDBCHelper {
             System.out.println("Opened database successfully");
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName);
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 int age = rs.getInt("age");
                 String address = rs.getString("address");
                 float salary = rs.getFloat("salary");
-                System.out.println("ID = " + id);
-                System.out.println("NAME = " + name);
-                System.out.println("AGE = " + age);
-                System.out.println("ADDRESS = " + address);
-                System.out.println("SALARY = " + salary);
-                System.out.println();
-                                }
+                answer.add("ID = " + id);
+                answer.add("NAME = " + name);
+                answer.add("AGE = " + age);
+                answer.add("ADDRESS = " + address);
+                answer.add("SALARY = " + salary);
+            }
             rs.close();
             stmt.close();
             c.close();
@@ -107,5 +116,92 @@ public class SQLiteJDBCHelper {
             System.exit(0);
         }
         System.out.println("Operation done successfully");
+        return answer;
+    }
+
+
+// --------------------------------------------Update--------------------------------------------
+
+    List<String> updateSQL(String tableName) {
+        
+        List<String> answer = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:test.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = ("Update "+ tableName + " set SALARY = '" + 25104.00 + "'where ID=1");    //   '   "     +  value     +        "      '
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName);    //("SELECT * FROM COMPANY;"
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                String address = rs.getString("address");
+                float salary = rs.getFloat("salary");
+                answer.add("ID = " + id);
+                answer.add("NAME = " + name);
+                answer.add("AGE = " + age);
+                answer.add("ADDRESS = " + address);
+                answer.add("SALARY = " + salary);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
+        return answer;
+    }
+
+
+//-------------------------------------------------------Delete----------------------------------------------------------
+
+    List<String> deleteSQL(String tableName) {
+        
+        List<String> answer = new ArrayList<String>();
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:test.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = ("DELETE from '" + tableName + "'where ID=2");
+            stmt.executeUpdate(sql);
+            c.commit();
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName);
+            while ( rs.next() ) {
+                int id = rs.getInt("id");
+                String  name = rs.getString("name");
+                int age  = rs.getInt("age");
+                String  address = rs.getString("address");
+                float salary = rs.getFloat("salary");
+                answer.add("ID = " + id);
+                answer.add("NAME = " + name);
+                answer.add("AGE = " + age);
+                answer.add("ADDRESS = " + address);
+                answer.add("SALARY = " + salary);
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Operation done successfully");
+        return answer;
     }
 }
