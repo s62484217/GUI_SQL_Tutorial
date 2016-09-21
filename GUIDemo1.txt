@@ -10,15 +10,26 @@ import javax.swing.*;
 
 public class GUIDemo1 {
     
+    static GUIDemo1 英雄 = new GUIDemo1();
+    
+    static int 平均身高 = 0;
+    int 薪水 = 0;
+    
+    public static void creat(int 輸入身高) {
+       平均身高 = 輸入身高;
+    }
+    
     public static void main(String[] args) {
         
+        GUIDemo1.英雄.薪水 = 8;
+       
+        
          final JTextField txtTableName = new JTextField();
-
          JLabel label = new JLabel("Label");
          
         //界面
         JFrame demo = new JFrame();
-        demo.setSize(1000, 1000);
+        demo.setSize(500, 700);
         demo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         demo.getContentPane().setLayout(new FlowLayout());
         Container cp = demo.getContentPane();
@@ -28,6 +39,8 @@ public class GUIDemo1 {
         Action creatAction = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 SQLiteJDBCHelper aSQLite = new SQLiteJDBCHelper();
+                
+                
                 aSQLite.createSQL(txtTableName.getText());
 
             }
@@ -105,8 +118,9 @@ public class GUIDemo1 {
 
         demo.setVisible(true);
     }
+   
 
-    
+
     public static String htmlString(ArrayList<String> array) {
    
         String sum = "";
@@ -118,5 +132,8 @@ public class GUIDemo1 {
                 
         return "<html>"+ sum + "</html>";
     }
-
-}
+    
+    public void run() {
+        
+    }
+ }
